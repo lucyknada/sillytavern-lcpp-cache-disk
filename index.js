@@ -46,7 +46,7 @@ eventSource.on(event_types.CHAT_CHANGED, async (id) => {
 })
 
 eventSource.on(event_types.MESSAGE_SENT, async () => {
-    await saveChat();
+    await loadChat(getContext().chatId);
 })
 
 eventSource.on(event_types.MESSAGE_RECEIVED, async () => {
