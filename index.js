@@ -42,16 +42,10 @@ const loadChat = async (id) => {
     }
 }
 
-eventSource.on(event_types.CHAT_CHANGED, (id) => {
-    console.log("shiee", "chat_changed")
-    !(async () => {
-        loadChat(id);
-    })()
+eventSource.on(event_types.CHAT_CHANGED, async (id) => {
+    await loadChat(id);
 })
 
-eventSource.on(event_types.MESSAGE_RECEIVED, () => {
-    console.log("shiee", "message_received")
-    !(async () => {
-        saveChat();
-    })()
+eventSource.on(event_types.MESSAGE_RECEIVED, async () => {
+    await saveChat();
 })
