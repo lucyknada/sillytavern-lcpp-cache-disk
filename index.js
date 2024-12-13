@@ -23,7 +23,6 @@ const hashCode = (str, seed = 0) => {
 };
 
 const saveChat = async () => {
-    console.log("shiee", hashCode(getContext().chatId))
     await fetch(`http://${LCPP_SERVER}/slots/0?action=save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
