@@ -1,4 +1,4 @@
-import { eventSource, event_types } from "../../../../script.js";
+// import { getContext } from "../../../extensions.js";
 
 // settings
 
@@ -13,22 +13,32 @@ function hashCode(s) {
     }, 0);
 }
 
-const saveChat = (id) => {
-    fetch(`http://${LCPP_SERVER}/slots/0?action=save`, {
+const saveChat = async () => {
+    await fetch(`http://${LCPP_SERVER}/slots/0?action=save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: `{"filename":"${hashCode(getContext().chatId)}.bin"}`
+    })
+}
+
+const loadChat = async (id) => {
+    const req = await fetch(`http://${LCPP_SERVER}/slots/0?action=restore`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: `{"filename":"${hashCode(id)}.bin"}`
     })
+    if (!req.ok) {
+        await saveChat()
+    }
 }
 
-const loadChat = (id) => {
-    fetch(`http://${LCPP_SERVER}/slots/0?action=restore`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: `{"filename":"${hashCode(id)}.bin"}`
+eventSource.on(event_types.CHAT_CHANGED, (id) => {
+    (async () => {
+        loadChat(id);
     })
-}
-
-eventSource.on(event_types.CHAT_CHANGED, loadChat)
-eventSource.on(event_types.MESSAGE_RECEIVED, saveChat)
-eventSource.on(event_types.MESSAGE_SENT, saveChat)
+})
+eventSource.on(event_types.MESSAGE_RECEIVED, () => {
+    (async () => {
+        saveChat();
+    })
+})
