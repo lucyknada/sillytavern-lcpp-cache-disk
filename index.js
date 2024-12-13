@@ -14,7 +14,7 @@ function hashCode(s) {
 }
 
 const saveChat = (id) => {
-    fetch(`http://${LCPP_SERVER}/slots/0?action=restore`, {
+    fetch(`http://${LCPP_SERVER}/slots/0?action=save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: `{"filename":"${hashCode(id)}.bin"}`
