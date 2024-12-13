@@ -45,6 +45,10 @@ eventSource.on(event_types.CHAT_CHANGED, async (id) => {
     await loadChat(id);
 })
 
+eventSource.on(event_types.MESSAGE_SENT, async () => {
+    await saveChat();
+})
+
 eventSource.on(event_types.MESSAGE_RECEIVED, async () => {
     await saveChat();
 })
